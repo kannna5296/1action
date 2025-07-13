@@ -25,9 +25,6 @@ async def on_ready():
     await bot.tree.sync()
     print("✅ スラッシュコマンドを同期しました")
     print(f"✅ 1action ready!")
-
-    task_repository = TaskRepository()
-    task_repository.save_tasks("111", str(uuid.uuid1()))
     # Botが最初に問いかけてくるチャンネルにメッセージを送信
     # initial_channel = bot.get_channel(INITIAL_CHANNEL_ID)
     # if initial_channel and isinstance(initial_channel, discord.TextChannel):

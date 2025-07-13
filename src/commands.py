@@ -4,14 +4,17 @@ from views import ConfirmView
 from tasks import TaskRepository
 import os
 
-# TaskRepositoryのインスタンス
-task_repository = TaskRepository()
-
 #Bot独自のスラッシュコマンドを指定できる
 @app_commands.command(name="declare_task", description="今日やることを宣言しよう！")
 @app_commands.describe(today_task="今日やること")
 async def declare_task(interaction: Interaction, today_task: str):
     user_id = str(interaction.user.id)
+    if not interaction.guild:
+        await interaction.response.send_message("このコマンドはサーバ内でのみ使用できます。", ephemeral=True)
+        return
+    guid_id = str(interaction.guild.id)
+    # TaskRepositoryのインスタンス
+    task_repository = TaskRepository(guid_id)
 
     # タスク永続化
     task_repository.save_tasks(user_id, today_task)
