@@ -3,7 +3,10 @@ FROM python:3.13-slim
 
 # 必要なパッケージのインストール
 RUN apt-get update && apt-get install -y \
-    curl git build-essential && \
+    curl git build-essential tzdata && \
+    ln -snf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
+    echo "Asia/Tokyo" > /etc/timezone && \
+    dpkg-reconfigure -f noninteractive tzdata && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # 作業ディレクトリ作成
