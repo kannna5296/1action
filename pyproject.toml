@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "1action"
+version = "0.1.0"
+description = "Discord bot for task management"
+requires-python = ">=3.8"
+dependencies = [
+    "discord.py",
+    "apscheduler",
+    "python-dotenv",
+    "pytest"
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["test"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]

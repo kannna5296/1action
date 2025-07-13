@@ -2,7 +2,7 @@ import json
 import tempfile
 from pathlib import Path
 from unittest.mock import patch
-from tasks import TaskRepository
+from src.tasks import TaskRepository
 
 
 class TestTaskRepository:
@@ -91,7 +91,7 @@ class TestTaskRepository:
             task_repository = TaskRepository(str(test_data_file))
 
             # today_key()をモックして固定値を返すようにする
-            with patch('tasks.today_key', return_value="2024-01-15"):
+            with patch('src.tasks.today_key', return_value="2024-01-15"):
                 # 新規ユーザーのタスクを保存
                 user_id = "12345"
                 today_task = "新しいタスク"
@@ -128,7 +128,7 @@ class TestTaskRepository:
                 json.dump(existing_data, f, ensure_ascii=False, indent=2)
 
             # today_key()をモックして固定値を返すようにする
-            with patch('tasks.today_key', return_value="2024-01-16"):
+            with patch('src.tasks.today_key', return_value="2024-01-16"):
                 # 同じユーザーの新しいタスクを保存
                 user_id = "12345"
                 today_task = "新しいタスク"
@@ -157,7 +157,7 @@ class TestTaskRepository:
             task_repository = TaskRepository(str(test_data_file))
 
             # today_key()をモックして固定値を返すようにする
-            with patch('tasks.today_key', return_value="2024-01-15"):
+            with patch('src.tasks.today_key', return_value="2024-01-15"):
                 # 複数ユーザーのタスクを保存
                 task_repository.save_tasks("12345", "ユーザー1のタスク")
                 task_repository.save_tasks("67890", "ユーザー2のタスク")

@@ -1,8 +1,8 @@
 import discord
 from discord.ui import View, Button
 from discord import Interaction, ButtonStyle
-from tasks import TaskRepository
-from date_util import today_key
+from .tasks import TaskRepository
+from .date_util import today_key
 
 class ConfirmView(View):
     def __init__(self, user_id: str, task_repository: TaskRepository):
