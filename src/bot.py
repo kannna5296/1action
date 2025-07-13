@@ -23,20 +23,12 @@ if not TOKEN:
 @bot.event
 async def on_ready():
     await bot.tree.sync()
-    print("✅ スラッシュコマンドを同期しました")
-    print(f"✅ 1action ready!")
-    # Botが最初に問いかけてくるチャンネルにメッセージを送信
-    # initial_channel = bot.get_channel(INITIAL_CHANNEL_ID)
-    # if initial_channel and isinstance(initial_channel, discord.TextChannel):
-    #     await initial_channel.send("👋 1action Botがこのチャンネルで起動しました！ 時間になったら、TODOお聞きしますね。")
-    #     print(f"✅ 初期メッセージをチャンネル {initial_channel.name} に送信しました")
-
     scheduler = Scheduler(bot)
     scheduler.start()
+    print(f"✅ 1action ready!")
 
 # スラッシュコマンドを登録
 bot.tree.add_command(declare_task)
 bot.tree.add_command(init_channel)
-print("✅ スラッシュコマンドを登録しました")
 
 bot.run(TOKEN)
