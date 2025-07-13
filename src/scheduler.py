@@ -34,7 +34,7 @@ def start_scheduler(bot: Bot, channel_id: int):
         print(f"✅ Interval型スケジューラーを設定しました（{interval_minutes}分間隔）")
     else:
         # Cron型の場合（デフォルト）
-        cron_time = os.getenv("CRON_TIME", "13,21")  # デフォルト: 13時21分
+        cron_time = os.getenv("CRON_TIME", "7,30")
         hour, minute = map(int, cron_time.split(","))
         scheduler.add_job(
             send_morning_message,
