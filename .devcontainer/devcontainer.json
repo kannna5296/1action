@@ -1,7 +1,7 @@
 {
     "name": "one-action-discord-bot",
     "build": {
-        "dockerfile": "../Dockerfile"
+        "dockerfile": "Dockerfile"
     },
     "customizations": {
         "vscode": {

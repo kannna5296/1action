@@ -1,20 +1,48 @@
-# Python 3.13ベースイメージ（debianベース）
+# Python 3.13ベースイメージ
 FROM python:3.13-slim
 
-# 必要なパッケージのインストール
+# 非rootユーザーを作成
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+
+# 作業ディレクトリ設定
+WORKDIR /app
+
+# タイムゾーン設定
+ENV TZ=Asia/Tokyo
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# システムパッケージのインストール
 RUN apt-get update && apt-get install -y \
-    curl git build-essential tzdata && \
-    ln -snf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
-    echo "Asia/Tokyo" > /etc/timezone && \
-    dpkg-reconfigure -f noninteractive tzdata && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+    build-essential \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# 作業ディレクトリ作成
-WORKDIR /workspace
-
-# pip最新版
+# pip最新版にアップグレード
 RUN pip install --upgrade pip
 
-# 依存関係のインストール
+# 依存関係ファイルをコピー
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+
+# 依存関係をインストール
+RUN pip install --no-cache-dir -r requirements.txt
+
+# アプリケーションコードをコピー
+COPY src/ ./src/
+COPY pyproject.toml .
+
+# ファイルの所有者を変更
+RUN chown -R appuser:appuser /app
+
+# 非rootユーザーに切り替え
+USER appuser
+
+# 環境変数設定
+ENV PYTHONPATH=/app/src
+ENV PYTHONUNBUFFERED=1
+
+# ヘルスチェック
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "import discord; print('Health check passed')" || exit 1
+
+# アプリケーション起動
+CMD ["python", "-m", "src.bot"]
