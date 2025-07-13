@@ -1,11 +1,7 @@
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from discord.ext.commands import Bot
-from discord.utils import get
 from discord import TextChannel
-from dotenv import load_dotenv
-
-load_dotenv()
 
 def start_scheduler(bot: Bot, channel_id: int):
     scheduler = AsyncIOScheduler()
