@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from scheduler import Scheduler
 from commands import declare_task, init_channel, show_channel
 from config import Config
+from logger import logger
 
 intents = discord.Intents.default()
 intents.members = True
@@ -20,7 +21,7 @@ async def on_ready():
     await bot.tree.sync()
     scheduler = Scheduler(bot)
     scheduler.start()
-    print(f"✅ 1action ready!")
+    logger.info(f"✅ 1action ready!")
 
 config = Config()
 # スラッシュコマンドを登録

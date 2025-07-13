@@ -8,6 +8,7 @@ from discord import TextChannel
 
 from channel_repository import ChannelRepository
 from config import Config
+from logger import logger
 
 class Scheduler:
     def __init__(self, bot: Bot):
@@ -29,6 +30,7 @@ class Scheduler:
                         continue
                     await channel.send(f"{member.mention} おはよう☀ 今日のやることを `/declare_task` で教えてね！")
         except Exception as e:
+            logger.error("定時通知送信でエラーが起きました " + str(e))
             traceback.print_exc()
 
     def start(self):
@@ -39,7 +41,7 @@ class Scheduler:
                 self.send_morning_message,
                 IntervalTrigger(minutes=interval_minutes, timezone="Asia/Tokyo")
             )
-            print(f"✅ Interval型スケジューラーを設定しました（{interval_minutes}分間隔）")
+            logger.info(f"Interval型スケジューラーを設定しました（{interval_minutes}分間隔）")
         else:
             cron_time = Config.get("CRON_TIME", "7,30")
             hour, minute = map(int, cron_time.split(","))
@@ -47,5 +49,5 @@ class Scheduler:
                 self.send_morning_message,
                 CronTrigger(hour=hour, minute=minute, timezone="Asia/Tokyo")
             )
-            print(f"✅ Cron型スケジューラーを設定しました 日本時間（{hour}時{minute}分）")
+            logger.info(f"Cron型スケジューラーを設定しました 日本時間（{hour}時{minute}分）")
         self.scheduler.start()
