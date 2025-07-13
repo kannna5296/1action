@@ -9,7 +9,7 @@ from apscheduler.triggers.cron import CronTrigger
 
 # Bot生成
 intents = discord.Intents.default()
-intents.members = True
+intents.members = True #メンバー情報を一応取得するようにする
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 load_dotenv()
