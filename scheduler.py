@@ -20,5 +20,5 @@ def start_scheduler(bot: Bot, channel_id: str):
             print("辿り着いた")
             await channel.send(f"{member.mention} おはよう☀ 今日のやることを `/declare` で教えてね！")
 
-    scheduler.add_job(send_morning_message, CronTrigger(hour=12, minute=18, timezone="Asia/Tokyo"))
+    scheduler.add_job(send_morning_message, CronTrigger(hour=12, minute=25, timezone="Asia/Tokyo"))
     scheduler.start()
