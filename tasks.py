@@ -13,7 +13,7 @@ class TaskRepository:
                 return json.load(f)
         return {}
 
-    def save_tasks(self, user_id: int, today_task: str) -> None:
+    def save_tasks(self, user_id: str, today_task: str) -> None:
         user_tasks = self.load_tasks()
 
         # 初めてのユーザのためにobject化

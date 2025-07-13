@@ -5,7 +5,7 @@ from tasks import TaskRepository
 from date_util import today_key
 
 class ConfirmView(View):
-    def __init__(self, user_id: int, task_repository: TaskRepository):
+    def __init__(self, user_id: str, task_repository: TaskRepository):
         super().__init__(timeout=86400)
         self.user_id = user_id
         self.task_repository = task_repository
@@ -17,7 +17,7 @@ class ConfirmView(View):
             return
 
         user_tasks = self.task_repository.load_tasks()
-        task = user_tasks.get(str(self.user_id), {}).get(today_key())
+        task = user_tasks.get(self.user_id, {}).get(today_key())
         if task:
             await interaction.response.send_message(f"🎉 お疲れ様！『{task}』完了したね！", ephemeral=True)
         else:

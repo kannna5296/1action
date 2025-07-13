@@ -95,7 +95,7 @@ class TestTaskRepository:
             # today_key()をモックして固定値を返すようにする
             with patch('tasks.today_key', return_value="2024-01-15"):
                 # 新規ユーザーのタスクを保存
-                user_id = 12345
+                user_id = "12345"
                 today_task = "新しいタスク"
                 task_repository.save_tasks(user_id, today_task)
 
@@ -132,7 +132,7 @@ class TestTaskRepository:
             # today_key()をモックして固定値を返すようにする
             with patch('tasks.today_key', return_value="2024-01-16"):
                 # 同じユーザーの新しいタスクを保存
-                user_id = 12345
+                user_id = "12345"
                 today_task = "新しいタスク"
                 task_repository.save_tasks(user_id, today_task)
 

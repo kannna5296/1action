@@ -10,7 +10,7 @@ task_repository = TaskRepository()
 @app_commands.command(name="declare", description="今日やることを宣言しよう！")
 @app_commands.describe(today_task="今日やること")
 async def declare_command(interaction: Interaction, today_task: str):
-    user_id = interaction.user.id
+    user_id = str(interaction.user.id)
 
     # タスク永続化
     task_repository.save_tasks(user_id, today_task)
