@@ -1,7 +1,10 @@
 from discord import app_commands, Interaction
 from views import ConfirmView
-from tasks import save_tasks, load_tasks
+from tasks import TaskRepository
 from date_util import today_key
+
+# TaskRepositoryのインスタンス
+task_repository = TaskRepository()
 
 #Bot独自のスラッシュコマンドを指定できる
 @app_commands.command(name="declare", description="今日やることを宣言しよう！")
@@ -10,10 +13,10 @@ async def declare_command(interaction: Interaction, today_task: str):
     user_id = interaction.user.id
 
     # タスク永続化
-    save_tasks(user_id, today_task)
+    task_repository.save_tasks(user_id, today_task)
 
     # ボタン作る
-    view = ConfirmView(user_id)
+    view = ConfirmView(user_id, task_repository)
 
     # レスポンス
     await interaction.response.send_message(
