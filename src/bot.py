@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from task_repository import TaskRepository
 import os
 
-from scheduler import start_scheduler
+from scheduler import Scheduler
 from commands import declare_task, init_channel
 
 intents = discord.Intents.default()
@@ -31,7 +31,8 @@ async def on_ready():
     #     await initial_channel.send("👋 1action Botがこのチャンネルで起動しました！ 時間になったら、TODOお聞きしますね。")
     #     print(f"✅ 初期メッセージをチャンネル {initial_channel.name} に送信しました")
 
-    # start_scheduler(bot, CHANNEL_ID)
+    scheduler = Scheduler(bot)
+    scheduler.start()
 
 # スラッシュコマンドを登録
 bot.tree.add_command(declare_task)
