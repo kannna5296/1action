@@ -11,7 +11,8 @@ dependencies = [
     "discord.py",
     "apscheduler",
     "python-dotenv",
-    "pytest"
+    "pytest",
+    "boto3"
 ]
 
 [tool.pytest.ini_options]
