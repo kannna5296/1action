@@ -26,8 +26,8 @@ async def declare_task(interaction: Interaction, today_task: str):
         view=view
     )
 
-@app_commands.command(name="init_channel", description="Botと会話するチャンネルを設定します")
-@app_commands.describe(channel="Botを設定したいチャンネル")
+@app_commands.command(name="init_channel", description="Botが通知するチャンネルを設定します")
+@app_commands.describe(channel="Botが通知するチャンネル")
 async def init_channel(interaction: Interaction, channel: discord.TextChannel):
     if not interaction.guild:
         await interaction.response.send_message("このコマンドはサーバ内でのみ使用できます。", ephemeral=True)
@@ -38,7 +38,23 @@ async def init_channel(interaction: Interaction, channel: discord.TextChannel):
     channel_repository.save(guid_id, channel.id)
 
     await interaction.response.send_message(
-        f"✅ TODO確認チャンネルを {channel.mention} に設定しました！\n"
-        f"Botが再起動すると、このチャンネルに最初のメッセージが送信されます。",
+        f"✅ Botの通知チャンネルを {channel.mention} に設定しました！\n",
         ephemeral=True
     )
+
+@app_commands.command(name="show_channel", description="今設定されている通知チャンネルを確認します")
+async def show_channel(interaction: Interaction):
+    if not interaction.guild:
+        await interaction.response.send_message("このコマンドはサーバ内でのみ使用できます。", ephemeral=True)
+        return
+    guid_id = str(interaction.guild.id)
+    channel_repository = ChannelRepository()
+    channel_id = channel_repository.load(guid_id)
+    if channel_id is None:
+        await interaction.response.send_message("通知チャンネルはまだ設定されていません。/init_channel で設定してください！", ephemeral=True)
+        return
+    channel = interaction.guild.get_channel(channel_id)
+    if channel is None:
+        await interaction.response.send_message(f"通知チャンネル（ID: {channel_id}）は見つかりませんでした。", ephemeral=True)
+        return
+    await interaction.response.send_message(f"現在の通知チャンネルは {channel.mention} です！\nこのチャンネルにBotから投稿が飛んできます。", ephemeral=True)
