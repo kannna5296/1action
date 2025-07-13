@@ -3,8 +3,8 @@ from discord.ext import commands
 from dotenv import load_dotenv
 import os
 
-from .scheduler import start_scheduler
-from .commands import declare_command
+from scheduler import start_scheduler
+from commands import declare_command
 
 intents = discord.Intents.default()
 intents.members = True
