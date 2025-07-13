@@ -4,8 +4,24 @@ from views import ConfirmView
 from task_repository import TaskRepository
 from channel_repository import ChannelRepository
 
+@app_commands.command(name="init_channel", description="Botが通知するチャンネルを設定します。まずはこれを設定しよう！")
+@app_commands.describe(channel="Botが通知するチャンネル")
+async def init_channel(interaction: Interaction, channel: discord.TextChannel):
+    if not interaction.guild:
+        await interaction.response.send_message("このコマンドはサーバ内でのみ使用できます。", ephemeral=True)
+        return
+    guid_id = str(interaction.guild.id)
+
+    channel_repository = ChannelRepository()
+    channel_repository.save(guid_id, channel.id)
+
+    await interaction.response.send_message(
+        f"✅ Botの通知チャンネルを {channel.mention} に設定しました！\n",
+        ephemeral=True
+    )
+
 #Bot独自のスラッシュコマンドを指定できる
-@app_commands.command(name="declare_task", description="今日やることを宣言しよう！")
+@app_commands.command(name="declare_task", description="Botに今日やることを宣言しよう！")
 @app_commands.describe(today_task="今日やること")
 async def declare_task(interaction: Interaction, today_task: str):
     user_id = str(interaction.user.id)
@@ -26,23 +42,7 @@ async def declare_task(interaction: Interaction, today_task: str):
         view=view
     )
 
-@app_commands.command(name="init_channel", description="Botが通知するチャンネルを設定します")
-@app_commands.describe(channel="Botが通知するチャンネル")
-async def init_channel(interaction: Interaction, channel: discord.TextChannel):
-    if not interaction.guild:
-        await interaction.response.send_message("このコマンドはサーバ内でのみ使用できます。", ephemeral=True)
-        return
-    guid_id = str(interaction.guild.id)
-
-    channel_repository = ChannelRepository()
-    channel_repository.save(guid_id, channel.id)
-
-    await interaction.response.send_message(
-        f"✅ Botの通知チャンネルを {channel.mention} に設定しました！\n",
-        ephemeral=True
-    )
-
-@app_commands.command(name="show_channel", description="今設定されている通知チャンネルを確認します")
+@app_commands.command(name="show_channel", description="今設定されているBot通知チャンネルを確認しよう！")
 async def show_channel(interaction: Interaction):
     if not interaction.guild:
         await interaction.response.send_message("このコマンドはサーバ内でのみ使用できます。", ephemeral=True)
