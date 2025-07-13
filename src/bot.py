@@ -1,30 +1,31 @@
+import uuid
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
-import os
 
-from scheduler import start_scheduler
-from commands import declare_command
+from scheduler import Scheduler
+from commands import declare_task, init_channel, show_channel
+from config import Config
 
 intents = discord.Intents.default()
 intents.members = True
+intents.message_content = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 load_dotenv()
-TOKEN = os.getenv("DISCORD_BOT_TOKEN")
-CHANNEL_ID_STR = os.getenv("CHANNEL_ID")
-if not TOKEN or not CHANNEL_ID_STR:
-    raise ValueError("Required environment variables not set")
-CHANNEL_ID = int(CHANNEL_ID_STR)
 
 @bot.event
 async def on_ready():
-    print(f"✅ 1action ready!")
     await bot.tree.sync()
-    start_scheduler(bot, CHANNEL_ID)
+    scheduler = Scheduler(bot)
+    scheduler.start()
+    print(f"✅ 1action ready!")
 
+config = Config()
 # スラッシュコマンドを登録
-bot.tree.add_command(declare_command)
+bot.tree.add_command(declare_task)
+bot.tree.add_command(init_channel)
+bot.tree.add_command(show_channel)
 
-bot.run(TOKEN)
+bot.run(Config.get("DISCORD_BOT_TOKEN", ""))
