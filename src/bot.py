@@ -4,10 +4,11 @@ from dotenv import load_dotenv
 import os
 
 from scheduler import start_scheduler
-from commands import declare_command, set_initial_channel_command
+from commands import declare_task, init_channel
 
 intents = discord.Intents.default()
 intents.members = True
+intents.message_content = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
@@ -25,7 +26,13 @@ INITIAL_CHANNEL_ID = int(INITIAL_CHANNEL_ID_STR) if INITIAL_CHANNEL_ID_STR else 
 @bot.event
 async def on_ready():
     print(f"✅ 1action ready!")
+
+    # 登録されているコマンドを確認
+    print(f"登録されているコマンド: {[cmd.name for cmd in bot.tree.get_commands()]}")
+
+    # スラッシュコマンドを同期（コマンド登録後に実行）
     await bot.tree.sync()
+    print("✅ スラッシュコマンドを同期しました")
 
     # Botが最初に問いかけてくるチャンネルにメッセージを送信
     initial_channel = bot.get_channel(INITIAL_CHANNEL_ID)
@@ -36,7 +43,8 @@ async def on_ready():
     start_scheduler(bot, CHANNEL_ID)
 
 # スラッシュコマンドを登録
-bot.tree.add_command(declare_command)
-bot.tree.add_command(set_initial_channel_command)
+bot.tree.add_command(declare_task)
+bot.tree.add_command(init_channel)
+print("✅ スラッシュコマンドを登録しました")
 
 bot.run(TOKEN)

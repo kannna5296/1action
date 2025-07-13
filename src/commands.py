@@ -8,9 +8,9 @@ import os
 task_repository = TaskRepository()
 
 #Bot独自のスラッシュコマンドを指定できる
-@app_commands.command(name="1action_declare", description="今日やることを宣言しよう！")
+@app_commands.command(name="declare_task", description="今日やることを宣言しよう！")
 @app_commands.describe(today_task="今日やること")
-async def declare_command(interaction: Interaction, today_task: str):
+async def declare_task(interaction: Interaction, today_task: str):
     user_id = str(interaction.user.id)
 
     # タスク永続化
@@ -25,9 +25,9 @@ async def declare_command(interaction: Interaction, today_task: str):
         view=view
     )
 
-@app_commands.command(name="1action_init_channel", description="Botがと会話するチャンネルを設定します")
+@app_commands.command(name="init_channel", description="Botと会話するチャンネルを設定します")
 @app_commands.describe(channel="設定したいチャンネル")
-async def set_initial_channel_command(interaction: Interaction, channel: discord.TextChannel):
+async def init_channel(interaction: Interaction, channel: discord.TextChannel):
     # 環境変数を更新（実際の実装ではデータベースや設定ファイルを使用することを推奨）
     os.environ["INITIAL_CHANNEL_ID"] = str(channel.id)
 

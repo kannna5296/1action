@@ -16,7 +16,7 @@ WORKDIR /workspace
 RUN pip install --upgrade pip
 
 # 開発用の依存関係をインストール（requirements.txtは後でコピー）
-COPY requirements.txt .
+COPY ../requirements.txt ./requirements.txt
 RUN pip install -r requirements.txt
 
 # 開発用の設定
