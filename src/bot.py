@@ -1,6 +1,8 @@
+import uuid
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
+from tasks import TaskRepository
 import os
 
 from scheduler import start_scheduler
@@ -14,33 +16,25 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_BOT_TOKEN")
-CHANNEL_ID_STR = os.getenv("CHANNEL_ID")
-# Botが最初に問いかけてくるチャンネルID（オプション）
-INITIAL_CHANNEL_ID_STR = os.getenv("INITIAL_CHANNEL_ID")
 
-if not TOKEN or not CHANNEL_ID_STR:
+if not TOKEN:
     raise ValueError("Required environment variables not set")
-CHANNEL_ID = int(CHANNEL_ID_STR)
-INITIAL_CHANNEL_ID = int(INITIAL_CHANNEL_ID_STR) if INITIAL_CHANNEL_ID_STR else CHANNEL_ID
 
 @bot.event
 async def on_ready():
-    print(f"✅ 1action ready!")
-
-    # 登録されているコマンドを確認
-    print(f"登録されているコマンド: {[cmd.name for cmd in bot.tree.get_commands()]}")
-
-    # スラッシュコマンドを同期（コマンド登録後に実行）
     await bot.tree.sync()
     print("✅ スラッシュコマンドを同期しました")
+    print(f"✅ 1action ready!")
 
+    task_repository = TaskRepository()
+    task_repository.save_tasks("111", str(uuid.uuid1()))
     # Botが最初に問いかけてくるチャンネルにメッセージを送信
-    initial_channel = bot.get_channel(INITIAL_CHANNEL_ID)
-    if initial_channel and isinstance(initial_channel, discord.TextChannel):
-        await initial_channel.send("👋 1action Botがこのチャンネルで起動しました！ 時間になったら、TODOお聞きしますね。")
-        print(f"✅ 初期メッセージをチャンネル {initial_channel.name} に送信しました")
+    # initial_channel = bot.get_channel(INITIAL_CHANNEL_ID)
+    # if initial_channel and isinstance(initial_channel, discord.TextChannel):
+    #     await initial_channel.send("👋 1action Botがこのチャンネルで起動しました！ 時間になったら、TODOお聞きしますね。")
+    #     print(f"✅ 初期メッセージをチャンネル {initial_channel.name} に送信しました")
 
-    start_scheduler(bot, CHANNEL_ID)
+    # start_scheduler(bot, CHANNEL_ID)
 
 # スラッシュコマンドを登録
 bot.tree.add_command(declare_task)
