@@ -15,4 +15,6 @@ WORKDIR /workspace
 # pip最新版
 RUN pip install --upgrade pip
 
-# devcontainer実行時に requirements.txt からインストールされる
+# 依存関係のインストール
+COPY requirements.txt .
+RUN pip install -r requirements.txt
