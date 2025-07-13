@@ -1,7 +1,7 @@
-# Python 3.13ベースイメージ（debianベース）
+# Python 3.13ベースイメージ（開発用）
 FROM python:3.13-slim
 
-# 必要なパッケージのインストール
+# 必要なパッケージのインストール（開発用）
 RUN apt-get update && apt-get install -y \
     curl git build-essential tzdata && \
     ln -snf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
@@ -15,6 +15,11 @@ WORKDIR /workspace
 # pip最新版
 RUN pip install --upgrade pip
 
-# 依存関係のインストール
+# 開発用の依存関係をインストール（requirements.txtは後でコピー）
 COPY requirements.txt .
 RUN pip install -r requirements.txt
+
+# 開発用の設定
+# - 非rootユーザーは作成しない（開発環境では不要）
+# - ヘルスチェックは不要
+# - CMDは不要（devcontainerが管理）
