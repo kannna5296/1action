@@ -140,3 +140,6 @@ poetry.lock
 # OS
 .DS_Store
 Thumbs.db
+
+
+tasks.json
