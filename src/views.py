@@ -1,7 +1,7 @@
 import discord
 from discord.ui import View, Button
 from discord import Interaction, ButtonStyle
-from tasks import TaskRepository
+from task_repository import TaskRepository
 from date_util import today_key
 
 class ConfirmView(View):
@@ -17,7 +17,7 @@ class ConfirmView(View):
             await interaction.response.send_message("これはあなた専用のボタンだよ！", ephemeral=True)
             return
 
-        user_tasks = self.task_repository.load_tasks()
+        user_tasks = self.task_repository.load()
         task = user_tasks.get(self.authorized_user_id, {}).get(today_key())
         if task:
             await interaction.response.send_message(f"🎉 お疲れ様！『{task}』完了したね！", ephemeral=True)

@@ -2,7 +2,7 @@ import uuid
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
-from tasks import TaskRepository
+from task_repository import TaskRepository
 import os
 
 from scheduler import start_scheduler

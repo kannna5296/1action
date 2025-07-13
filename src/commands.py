@@ -1,8 +1,8 @@
 import discord
 from discord import app_commands, Interaction
 from views import ConfirmView
-from tasks import TaskRepository
-import os
+from task_repository import TaskRepository
+from channel_repository import ChannelRepository
 
 #Bot独自のスラッシュコマンドを指定できる
 @app_commands.command(name="declare_task", description="今日やることを宣言しよう！")
@@ -17,7 +17,7 @@ async def declare_task(interaction: Interaction, today_task: str):
     task_repository = TaskRepository(guid_id)
 
     # タスク永続化
-    task_repository.save_tasks(user_id, today_task)
+    task_repository.save(user_id, today_task)
 
     # ボタン作る
     view = ConfirmView(user_id, task_repository)
@@ -31,8 +31,15 @@ async def declare_task(interaction: Interaction, today_task: str):
 @app_commands.command(name="init_channel", description="Botと会話するチャンネルを設定します")
 @app_commands.describe(channel="設定したいチャンネル")
 async def init_channel(interaction: Interaction, channel: discord.TextChannel):
-    # 環境変数を更新（実際の実装ではデータベースや設定ファイルを使用することを推奨）
-    os.environ["INITIAL_CHANNEL_ID"] = str(channel.id)
+    if not interaction.guild:
+        await interaction.response.send_message("このコマンドはサーバ内でのみ使用できます。", ephemeral=True)
+        return
+    guid_id = str(interaction.guild.id)
+    # ChannelRepositoryのインスタンス
+    channel_repository = ChannelRepository(guid_id)
+
+    # タスク永続化
+    channel_repository.save(channel.id)
 
     await interaction.response.send_message(
         f"✅ 初期チャンネルを {channel.mention} に設定しました！\n"

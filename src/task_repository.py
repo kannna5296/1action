@@ -6,11 +6,11 @@ class TaskRepository:
         self.file_name = f"{server_id}_task.json"
         self.client = S3Client()
 
-    def load_tasks(self) -> dict:
+    def load(self) -> dict:
         return self.client.load_json(self.file_name)
 
-    def save_tasks(self, user_id: str, today_task: str) -> None:
-        user_tasks = self.load_tasks()
+    def save(self, user_id: str, today_task: str) -> None:
+        user_tasks = self.load()
         if user_id not in user_tasks:
             user_tasks[user_id] = {}
         user_tasks[user_id][today_key()] = today_task
