@@ -2,6 +2,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from discord.ext.commands import Bot
 from discord.utils import get
+from discord import TextChannel
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,6 +13,10 @@ def start_scheduler(bot: Bot, channel_id: int):
     async def send_morning_message():
         print("起動してますよ")
         channel = bot.get_channel(channel_id)
+        if not isinstance(channel, TextChannel):
+            print("テキストチャンネルではありません")
+            return
+
         guild = channel.guild
         for member in guild.members:
             print(member)
@@ -20,5 +25,5 @@ def start_scheduler(bot: Bot, channel_id: int):
             print("辿り着いた")
             await channel.send(f"{member.mention} おはよう☀ 今日のやることを `/declare` で教えてね！")
 
-    scheduler.add_job(send_morning_message, CronTrigger(hour=12, minute=25, timezone="Asia/Tokyo"))
+    scheduler.add_job(send_morning_message, CronTrigger(hour=13, minute=15, timezone="Asia/Tokyo"))
     scheduler.start()
