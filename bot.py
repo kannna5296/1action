@@ -5,7 +5,7 @@ import os
 
 from scheduler import start_scheduler
 from commands import declare_command
-from tasks import user_tasks
+from tasks import load_tasks
 
 intents = discord.Intents.default()
 intents.members = True
