@@ -5,7 +5,6 @@ import os
 
 from scheduler import start_scheduler
 from commands import declare_command
-from tasks import load_tasks
 
 intents = discord.Intents.default()
 intents.members = True
@@ -14,7 +13,10 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_BOT_TOKEN")
-CHANNEL_ID = int(os.getenv("CHANNEL_ID"))
+CHANNEL_ID_STR = os.getenv("CHANNEL_ID")
+if not TOKEN or not CHANNEL_ID_STR:
+    raise ValueError("Required environment variables not set")
+CHANNEL_ID = int(CHANNEL_ID_STR)
 
 @bot.event
 async def on_ready():

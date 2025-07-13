@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def start_scheduler(bot: Bot, channel_id: str):
+def start_scheduler(bot: Bot, channel_id: int):
     scheduler = AsyncIOScheduler()
 
     async def send_morning_message():
