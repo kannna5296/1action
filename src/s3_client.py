@@ -2,14 +2,15 @@ import os
 import json
 import boto3
 from botocore.exceptions import ClientError
+from config import Config
 
 class S3Client:
     def __init__(self):
-        self.bucket = os.getenv("S3_BUCKET_NAME")
+        self.bucket = Config.get("S3_BUCKET_NAME")
         self.s3 = boto3.client(
             's3',
-            aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
-            aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+            aws_access_key_id=Config.get("AWS_ACCESS_KEY_ID"),
+            aws_secret_access_key=Config.get("AWS_SECRET_ACCESS_KEY"),
             region_name="ap-northeast-1",
         )
 
