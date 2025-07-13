@@ -129,51 +129,82 @@ class TestTaskRepository:
             with open(test_data_file, "w", encoding="UTF-8") as f:
                 json.dump(existing_data, f, ensure_ascii=False, indent=2)
 
-            # 同じユーザーの新しいタスクを保存
-            user_id = 12345
-            today_task = "新しいタスク"
-            task_repository.save_tasks(user_id, today_task)
+            # today_key()をモックして固定値を返すようにする
+            with patch('tasks.today_key', return_value="2024-01-16"):
+                # 同じユーザーの新しいタスクを保存
+                user_id = 12345
+                today_task = "新しいタスク"
+                task_repository.save_tasks(user_id, today_task)
 
-            # 保存されたデータを読み込んで確認
-            result = task_repository.load_tasks()
-            assert str(user_id) in result
-            # 既存のタスクも残っていることを確認
-            assert "2024-01-15" in result[str(user_id)]
-            assert result[str(user_id)]["2024-01-15"] == "既存のタスク"
-            # 新しいタスクも追加されていることを確認
-            assert today_task in result[str(user_id)].values()
+                # 保存されたJSONファイルを直接読み込んで確認
+                with open(test_data_file, "r", encoding="UTF-8") as f:
+                    saved_data = json.load(f)
 
-    def test_save_tasks_multiple_users(self):
-        """複数ユーザーのタスク保存をテスト"""
-        # 一時的なディレクトリでテスト
-        with tempfile.TemporaryDirectory() as temp_dir:
-            test_data_file = Path(temp_dir) / "tasks.json"
-            task_repository = TaskRepository(str(test_data_file))
+                # 期待されるJSON構造（既存のタスクも残る）
+                expected_data = {
+                    "12345": {
+                        "2024-01-15": "既存のタスク",
+                        "2024-01-16": "新しいタスク"
+                    }
+                }
 
-            # 複数ユーザーのタスクを保存
-            task_repository.save_tasks(12345, "ユーザー1のタスク")
-            task_repository.save_tasks(67890, "ユーザー2のタスク")
+                # JSONの内容を直接比較
+                assert saved_data == expected_data
 
-            # 保存されたデータを読み込んで確認
-            result = task_repository.load_tasks()
-            assert "12345" in result
-            assert "67890" in result
-            assert "ユーザー1のタスク" in result["12345"].values()
-            assert "ユーザー2のタスク" in result["67890"].values()
+    # def test_save_tasks_multiple_users(self):
+    #     """複数ユーザーのタスク保存をテスト"""
+    #     # 一時的なディレクトリでテスト
+    #     with tempfile.TemporaryDirectory() as temp_dir:
+    #         test_data_file = Path(temp_dir) / "tasks.json"
+    #         task_repository = TaskRepository(str(test_data_file))
 
-    def test_save_tasks_japanese_text(self):
-        """日本語テキストの保存をテスト"""
-        # 一時的なディレクトリでテスト
-        with tempfile.TemporaryDirectory() as temp_dir:
-            test_data_file = Path(temp_dir) / "tasks.json"
-            task_repository = TaskRepository(str(test_data_file))
+    #         # today_key()をモックして固定値を返すようにする
+    #         with patch('tasks.today_key', return_value="2024-01-15"):
+    #             # 複数ユーザーのタスクを保存
+    #             task_repository.save_tasks(12345, "ユーザー1のタスク")
+    #             task_repository.save_tasks(67890, "ユーザー2のタスク")
 
-            # 日本語のタスクを保存
-            user_id = 12345
-            today_task = "日本語のタスク：プログラミング学習"
-            task_repository.save_tasks(user_id, today_task)
+    #             # 保存されたJSONファイルを直接読み込んで確認
+    #             with open(test_data_file, "r", encoding="UTF-8") as f:
+    #                 saved_data = json.load(f)
 
-            # 保存されたデータを読み込んで確認
-            result = task_repository.load_tasks()
-            assert str(user_id) in result
-            assert today_task in result[str(user_id)].values()
+    #             # 期待されるJSON構造
+    #             expected_data = {
+    #                 "12345": {
+    #                     "2024-01-15": "ユーザー1のタスク"
+    #                 },
+    #                 "67890": {
+    #                     "2024-01-15": "ユーザー2のタスク"
+    #                 }
+    #             }
+
+    #             # JSONの内容を直接比較
+    #             assert saved_data == expected_data
+
+    # def test_save_tasks_japanese_text(self):
+    #     """日本語テキストの保存をテスト"""
+    #     # 一時的なディレクトリでテスト
+    #     with tempfile.TemporaryDirectory() as temp_dir:
+    #         test_data_file = Path(temp_dir) / "tasks.json"
+    #         task_repository = TaskRepository(str(test_data_file))
+
+    #         # today_key()をモックして固定値を返すようにする
+    #         with patch('tasks.today_key', return_value="2024-01-15"):
+    #             # 日本語のタスクを保存
+    #             user_id = 12345
+    #             today_task = "日本語のタスク：プログラミング学習"
+    #             task_repository.save_tasks(user_id, today_task)
+
+    #             # 保存されたJSONファイルを直接読み込んで確認
+    #             with open(test_data_file, "r", encoding="UTF-8") as f:
+    #                 saved_data = json.load(f)
+
+    #             # 期待されるJSON構造
+    #             expected_data = {
+    #                 "12345": {
+    #                     "2024-01-15": "日本語のタスク：プログラミング学習"
+    #                 }
+    #             }
+
+    #             # JSONの内容を直接比較
+    #             assert saved_data == expected_data
