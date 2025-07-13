@@ -1,4 +1,3 @@
-from datetime import date
 import json
 from pathlib import Path
 import os
@@ -16,6 +15,3 @@ def save_tasks(user_tasks: dict) -> None:
     with open(DATA_FILE, "w", encoding="UTF-8") as f:
         json.dump(user_tasks, f, ensure_ascii=False, indent=2)
     print("✅ tasks.json に保存しました")  # ← これを入れる
-
-def today_key():
-    return date.today().isoformat()

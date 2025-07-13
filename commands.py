@@ -1,6 +1,7 @@
 from discord import app_commands, Interaction
 from views import ConfirmView
-from tasks import today_key, save_tasks, load_tasks
+from tasks import save_tasks, load_tasks
+from date_util import today_key
 
 #Bot独自のスラッシュコマンドを指定できる
 @app_commands.command(name="declare", description="今日やることを宣言しよう！")
@@ -15,7 +16,7 @@ async def declare_command(interaction: Interaction, today_task: str):
     user_tasks[user_id][today] = today_task
     save_tasks(user_tasks)  # 登録後に保存！
 
-    view = ConfirmView(user_id, today)
+    view = ConfirmView(user_id)
     await interaction.response.send_message(
         f"📝 『{today_task}』 を今日のやることに登録したよ！達成できたらボタン押してね👇",
         view=view
