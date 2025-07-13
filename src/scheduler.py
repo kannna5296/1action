@@ -16,17 +16,18 @@ class Scheduler:
 
     async def send_morning_message(self):
         try:
+            repo = ChannelRepository()
             for guild in self.bot.guilds:
-                repo = ChannelRepository(str(guild.id))
-                channel_ids = repo.load()
-                for channel_id in channel_ids:
-                    channel = self.bot.get_channel(channel_id)
-                    if not isinstance(channel, TextChannel):
+                channel_id = repo.load(str(guild.id))
+                if channel_id is None:
+                    continue
+                channel = self.bot.get_channel(channel_id)
+                if not isinstance(channel, TextChannel):
+                    continue
+                for member in guild.members:
+                    if member.bot:
                         continue
-                    for member in guild.members:
-                        if member.bot:
-                            continue
-                        await channel.send(f"{member.mention} おはよう☀ 今日のやることを `/declare_task` で教えてね！")
+                    await channel.send(f"{member.mention} おはよう☀ 今日のやることを `/declare_task` で教えてね！")
         except Exception as e:
             traceback.print_exc()
 

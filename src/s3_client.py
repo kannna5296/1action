@@ -6,7 +6,7 @@ from config import Config
 
 class S3Client:
     def __init__(self):
-        self.bucket = Config.get("S3_BUCKET_NAME")
+        self.bucket = "1action"
         self.s3 = boto3.client(
             's3',
             aws_access_key_id=Config.get("AWS_ACCESS_KEY_ID"),

@@ -34,8 +34,8 @@ async def init_channel(interaction: Interaction, channel: discord.TextChannel):
         return
     guid_id = str(interaction.guild.id)
 
-    channel_repository = ChannelRepository(guid_id)
-    channel_repository.save(channel.id)
+    channel_repository = ChannelRepository()
+    channel_repository.save(guid_id, channel.id)
 
     await interaction.response.send_message(
         f"✅ TODO確認チャンネルを {channel.mention} に設定しました！\n"

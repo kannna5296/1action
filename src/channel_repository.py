@@ -1,21 +1,19 @@
 from s3_client import S3Client
+from typing import Optional
 
 class ChannelRepository:
-    def __init__(self, server_id: str):
-        self.file_name = f"{server_id}_channel.json"
+    FILE_NAME = "channels.json"
+
+    def __init__(self):
         self.client = S3Client()
 
-    def load(self) -> list:
-        data = self.client.load_json(self.file_name)
-        # channelsキーがなければ空リスト
-        return data.get("channels", []) if isinstance(data, dict) else []
+    def load(self, server_id: str) -> Optional[int]:
+        data = self.client.load_json(self.FILE_NAME)
+        return data.get(str(server_id)) if isinstance(data, dict) else None
 
-    def save(self, channel_id: int) -> None:
-        data = self.client.load_json(self.file_name)
+    def save(self, server_id: str, channel_id: int) -> None:
+        data = self.client.load_json(self.FILE_NAME)
         if not isinstance(data, dict):
             data = {}
-        channels = data.get("channels", [])
-        if channel_id not in channels:
-            channels.append(channel_id)
-        data["channels"] = channels
-        self.client.save_json(data, self.file_name)
+        data[str(server_id)] = channel_id
+        self.client.save_json(data, self.FILE_NAME)
