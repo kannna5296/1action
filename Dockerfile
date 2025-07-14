@@ -33,18 +33,17 @@ COPY pyproject.toml .
 # ファイルの所有者を変更
 RUN chown -R appuser:appuser /app
 
+COPY healthcheck.sh /app/healthcheck.sh
+RUN chmod +x /app/healthcheck.sh
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD /app/healthcheck.sh
+
 # 非rootユーザーに切り替え
 USER appuser
 
 # 環境変数設定
 ENV PYTHONPATH=/app/src
 ENV PYTHONUNBUFFERED=1
-
-# ヘルスチェック
-COPY healthcheck.sh /healthcheck.sh
-RUN chmod +x /healthcheck.sh
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD /healthcheck.sh
 
 # アプリケーション起動
 CMD ["python", "-m", "src.bot"]
