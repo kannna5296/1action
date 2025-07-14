@@ -41,8 +41,10 @@ ENV PYTHONPATH=/app/src
 ENV PYTHONUNBUFFERED=1
 
 # ヘルスチェック
+COPY healthcheck.sh /healthcheck.sh
+RUN chmod +x /healthcheck.sh
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "import discord; print('Health check passed')" || exit 1
+  CMD /healthcheck.sh
 
 # アプリケーション起動
 CMD ["python", "-m", "src.bot"]
