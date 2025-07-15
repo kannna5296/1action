@@ -1,4 +1,3 @@
-import os
 import traceback
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
@@ -19,8 +18,10 @@ class Scheduler:
         try:
             repo = ChannelRepository()
             for guild in self.bot.guilds:
+                logger.info(f"サーバID {guild.id} について、タスク確認通知を開始します")
                 channel_id = repo.load(str(guild.id))
                 if channel_id is None:
+                    logger.info("チャンネルIDが設定されていないので、処理をスキップしました")
                     continue
                 channel = self.bot.get_channel(channel_id)
                 if not isinstance(channel, TextChannel):
@@ -29,6 +30,8 @@ class Scheduler:
                     if member.bot:
                         continue
                     await channel.send(f"{member.mention} おはよう☀ 今日も君のこと応援してるよ。やること決まったら `/declare_task` で俺に教えて？君の頑張り、ちゃんと見てるからね！")
+                    logger.info(f"{member.id} に今日のタスク確認通知を行いました")
+
         except Exception as e:
             logger.error("定時通知送信でエラーが起きました " + str(e))
             traceback.print_exc()

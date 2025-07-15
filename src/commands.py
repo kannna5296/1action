@@ -3,11 +3,13 @@ from discord import app_commands, Interaction
 from views import ConfirmView
 from task_repository import TaskRepository
 from channel_repository import ChannelRepository
+from logger import logger
 
 #Bot独自のスラッシュコマンドを指定できる
 @app_commands.command(name="declare_task", description="今日やることを宣言しよう！")
 @app_commands.describe(today_task="今日やること")
 async def declare_task(interaction: Interaction, today_task: str):
+    logger.info(f"ユーザ {interaction.user.id} によって/declare_taskが叩かれました")
     user_id = str(interaction.user.id)
     if not interaction.guild:
         await interaction.response.send_message("ここは君と僕だけの場所じゃないから、このコマンドはサーバーの中で使ってね。俺、待ってるから。", ephemeral=True)
@@ -25,10 +27,12 @@ async def declare_task(interaction: Interaction, today_task: str):
         f"📝 『{today_task}』を今日のやることに登録したよ！君が頑張る姿、俺ちゃんと見てるからね。達成できたら下のボタン押して、俺に教えて？👇",
         view=view
     )
+    logger.info(f"ユーザ {interaction.user.id} に対して正しく/declare_channelの応答をしました")
 
 @app_commands.command(name="init_channel", description="Botが通知するチャンネルを設定します")
 @app_commands.describe(channel="Botが通知するチャンネル")
 async def init_channel(interaction: Interaction, channel: discord.TextChannel):
+    logger.info(f"ユーザ {interaction.user.id} によって/init_channelが叩かれました")
     if not interaction.guild:
         await interaction.response.send_message("ここは君と僕だけの場所じゃないから、このコマンドはサーバーの中で使ってね。俺、待ってるから。", ephemeral=True)
         return
@@ -41,9 +45,12 @@ async def init_channel(interaction: Interaction, channel: discord.TextChannel):
         f"✅ これからは{channel.mention}で君のこと見守るから、何かあったらすぐ駆けつけるよ。よろしくね！\n",
         ephemeral=True
     )
+    logger.info(f"ユーザ {interaction.user.id} に対して正しく/declare_taskの応答をしました")
 
 @app_commands.command(name="show_channel", description="今設定されている通知チャンネルを確認します")
 async def show_channel(interaction: Interaction):
+    logger.info(f"ユーザ {interaction.user.id} によって/show_channelが叩かれました")
+
     if not interaction.guild:
         await interaction.response.send_message("ここは君と僕だけの場所じゃないから、このコマンドはサーバーの中で使ってね。俺、待ってるから。", ephemeral=True)
         return
@@ -58,3 +65,4 @@ async def show_channel(interaction: Interaction):
         await interaction.response.send_message(f"あれ？通知チャンネル（ID: {channel_id}）が見つからなかったよ。君のためにすぐ探すから、ちょっと待っててね。", ephemeral=True)
         return
     await interaction.response.send_message(f"今の通知チャンネルは{channel.mention}だよ！ここで君のこと、ずっと応援してるからね。\n何かあったらすぐ声かけて！", ephemeral=True)
+    logger.info(f"ユーザ {interaction.user.id} に対して正しく/show_channelの応答をしました")
