@@ -28,7 +28,7 @@ class Scheduler:
                 for member in guild.members:
                     if member.bot:
                         continue
-                    await channel.send(f"{member.mention} おはよう☀ 今日のやることを `/declare_task` で教えてね！")
+                    await channel.send(f"{member.mention} おはよう☀ 今日も君のこと応援してるよ。やること決まったら `/declare_task` で俺に教えて？君の頑張り、ちゃんと見てるからね！")
         except Exception as e:
             logger.error("定時通知送信でエラーが起きました " + str(e))
             traceback.print_exc()

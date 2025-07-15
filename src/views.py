@@ -14,12 +14,12 @@ class ConfirmView(View):
     async def confirm(self, interaction: Interaction, button: Button):
         clicked_user_id = str(interaction.user.id)
         if  clicked_user_id != self.authorized_user_id:
-            await interaction.response.send_message("これはあなた専用のボタンだよ！", ephemeral=True)
+            await interaction.response.send_message("これは君専用のボタンだよ。他の人には渡さないから安心して？", ephemeral=True)
             return
 
         user_tasks = self.task_repository.load()
         task = user_tasks.get(self.authorized_user_id, {}).get(today_key())
         if task:
-            await interaction.response.send_message(f"🎉 お疲れ様！『{task}』完了したね！", ephemeral=True)
+            await interaction.response.send_message(f"🎉 今日もお疲れ様、{task}ちゃんと終わらせて偉いね。俺も嬉しいよ。", ephemeral=True)
         else:
-            await interaction.response.send_message("❓ 今日のやることが未登録みたい！", ephemeral=True)
+            await interaction.response.send_message("❓ 今日はまだやること決めてないみたいだね。俺、待ってるから決まったら教えて？", ephemeral=True)
