@@ -45,7 +45,7 @@ USER appuser
 ENV PYTHONPATH=/app/src
 ENV PYTHONUNBUFFERED=1
 
-EXPOSE 8080
+EXPOSE 8000
 
 # アプリケーション起動
 CMD ["python", "-m", "src.bot"]
