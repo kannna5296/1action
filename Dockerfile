@@ -13,9 +13,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # システムパッケージのインストール
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+  build-essential \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
 # pip最新版にアップグレード
 RUN pip install --upgrade pip
@@ -44,6 +44,8 @@ USER appuser
 # 環境変数設定
 ENV PYTHONPATH=/app/src
 ENV PYTHONUNBUFFERED=1
+
+EXPOSE 8080
 
 # アプリケーション起動
 CMD ["python", "-m", "src.bot"]
