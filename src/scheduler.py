@@ -4,7 +4,7 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 from discord.ext.commands import Bot
 from discord import TextChannel
-from message_list import message_list
+from morning_message import message_list
 import random
 
 from channel_repository import ChannelRepository

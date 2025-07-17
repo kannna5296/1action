@@ -22,7 +22,7 @@ async def on_ready():
     await bot.tree.sync()
     scheduler = Scheduler(bot)
     scheduler.start()
-    logger.info(f"✅ 1action ready!")
+    logger.info(f"✅ タスクカレピ ready!")
 
 config = Config()
 # スラッシュコマンドを登録

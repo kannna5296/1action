@@ -3,6 +3,8 @@ from discord.ui import View, Button
 from discord import Interaction, ButtonStyle
 from task_repository import TaskRepository
 from date_util import today_key
+from task_complete_message import message_list
+import random
 
 class ConfirmView(View):
     def __init__(self, authorized_user_id: str, task_repository: TaskRepository):
@@ -20,6 +22,7 @@ class ConfirmView(View):
         user_tasks = self.task_repository.load()
         task = user_tasks.get(self.authorized_user_id, {}).get(today_key())
         if task:
-            await interaction.response.send_message(f"🎉 今日もお疲れ様、{task}ちゃんと終わらせて偉いね。俺も嬉しいよ。", ephemeral=True)
+            list = random.choice(message_list)
+            await interaction.response.send_message(list["message"].replace("{task}", str(task)))
         else:
-            await interaction.response.send_message("❓ 今日はまだやること決めてないみたいだね。俺、待ってるから決まったら教えて？", ephemeral=True)
+            await interaction.response.send_message("❓ 今日はまだやること決めてないみたいだね。俺、待ってるから決まったら教えて？")
