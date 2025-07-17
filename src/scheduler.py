@@ -4,6 +4,8 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 from discord.ext.commands import Bot
 from discord import TextChannel
+from message_list import message_list
+import random
 
 from channel_repository import ChannelRepository
 from config import Config
@@ -29,7 +31,8 @@ class Scheduler:
                 for member in guild.members:
                     if member.bot:
                         continue
-                    await channel.send(f"{member.mention} おはよう☀ 今日も君のこと応援してるよ。やること決まったら `/declare_task` で俺に教えて？君の頑張り、ちゃんと見てるからね！")
+                    list = random.choice(message_list)
+                    await channel.send(list["message"].replace("{member.mention}", str(member.mention)))
                     logger.info(f"{member.id} に今日のタスク確認通知を行いました")
 
         except Exception as e:
