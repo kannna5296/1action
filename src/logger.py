@@ -5,7 +5,7 @@ from typing import Optional
 class Logger:
     """時刻付きログ出力を行うクラス"""
 
-    def __init__(self, name: str = "1action"):
+    def __init__(self, name: str = "タスクカレピ"):
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.INFO)
 
