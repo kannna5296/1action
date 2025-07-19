@@ -1,7 +1,7 @@
 import discord
 from discord.ui import View, Button
 from discord import Interaction, ButtonStyle
-from task_repository import TaskRepository
+from repository.task_repository import TaskRepository
 from date_util import today_key
 from task_complete_message import message_list
 import random

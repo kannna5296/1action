@@ -21,6 +21,9 @@ load_dotenv()
 async def on_ready():
     await bot.tree.sync()
     scheduler = Scheduler(bot)
+    # 動作確認用
+    if Config.get("ENVIRONMENT", "prod").lower() == "local":
+        await scheduler.send_morning_message_local()
     scheduler.start()
     logger.info(f"✅ タスクカレピ ready!")
 
