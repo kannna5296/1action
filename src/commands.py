@@ -1,8 +1,8 @@
 import discord
 from discord import app_commands, Interaction
 from views import ConfirmView
-from task_repository import TaskRepository
-from channel_repository import ChannelRepository
+from repository.task_repository import TaskRepository
+from repository.channel_repository import ChannelRepository
 from logger import logger
 
 #Bot独自のスラッシュコマンドを指定できる
